@@ -75,4 +75,9 @@ const login = async (req, res) => {
   }
 };
 
-export { signUp, login };
+const profileController = async (req, res) => {
+  console.log("test controller");
+  res.send("I'm in profileController");
+};
+
+export { signUp, login, profileController };
