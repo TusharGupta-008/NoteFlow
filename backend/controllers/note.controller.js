@@ -1,0 +1,31 @@
+import noteModel from "../models/note.model.js";
+
+const createNote = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const userId = req.user.id;
+
+    if (!title || !description) {
+      return res.status(400).json({
+        message: "Please fill the details",
+      });
+    }
+
+    const creation = await noteModel.create({
+      title,
+      description,
+      userId,
+    });
+    res.status(201).json({
+      creation,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Server error",
+      error,
+    });
+  }
+};
+
+export default createNote;
