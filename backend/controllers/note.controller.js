@@ -20,7 +20,7 @@ const createNote = async (req, res) => {
       creation,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       message: "Server error",
       error,
@@ -28,4 +28,20 @@ const createNote = async (req, res) => {
   }
 };
 
-export default createNote;
+const getNotes = async (req, res) => {
+  try {
+    const notes = await noteModel.find({ userId: req.user.id });
+    res.status(200).json({
+      message: "Here are your notes",
+      notes,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error",
+      error,
+    });
+  }
+};
+
+export { createNote, getNotes };
