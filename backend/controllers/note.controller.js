@@ -65,4 +65,32 @@ const singleNote = async (req, res) => {
   }
 };
 
-export { createNote, getNotes, singleNote };
+const deleteNote = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const note = await noteModel.findById(id);
+    if (!note) {
+      return res.status(404).json({
+        message: "No note found",
+      });
+    }
+    if (note.userId !== req.user.id) {
+      return res.status(403).json({
+        message: "Not authorized",
+      });
+    }
+    const deletedNote = await noteModel.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Note deleted",
+      deletedNote,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error,
+    });
+  }
+};
+
+export { createNote, getNotes, singleNote, deleteNote };
