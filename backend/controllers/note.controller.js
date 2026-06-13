@@ -44,4 +44,25 @@ const getNotes = async (req, res) => {
   }
 };
 
-export { createNote, getNotes };
+const singleNote = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const note = await noteModel.findById(id);
+    if (!note) {
+      return res.status(404).json({
+        message: "Not found",
+      });
+    }
+    res.status(200).json({
+      message: "here is your note",
+      note,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error,
+    });
+  }
+};
+
+export { createNote, getNotes, singleNote };
