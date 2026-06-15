@@ -1,21 +1,19 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
-
+  const navigate = useNavigate();
   const fetchNotes = async () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/notes",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get("http://localhost:4000/api/notes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       console.log(response.data);
 
@@ -32,6 +30,8 @@ const Dashboard = () => {
   return (
     <>
       <h1>Dashboard</h1>
+
+      <button onClick={() => navigate("/create")}>Create Note</button>
 
       {notes.map((note) => (
         <div key={note._id}>
