@@ -18,6 +18,9 @@ app.use(
 const port = process.env.PORT;
 
 app.use(express.json());
+app.get("/",(req,res)=>{
+  res.json("Backend is wroking ...")
+})
 
 app.use("/api", appRouter);
 app.use("/api/notes", noteRouter);
