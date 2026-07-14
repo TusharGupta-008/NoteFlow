@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const fetchNotes = async () => {
     try {
@@ -18,14 +19,22 @@ const Dashboard = () => {
         },
       );
 
-      console.log(response.data);
       setNotes(response.data.notes);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); 
     }
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
     fetchNotes();
   }, []);
 
@@ -36,6 +45,7 @@ const Dashboard = () => {
       await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/notes/delete/${id}`,
         {
+          
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,6 +57,9 @@ const Dashboard = () => {
       console.log(error);
     }
   };
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <div className="dashboard">
@@ -64,17 +77,32 @@ const Dashboard = () => {
       >
         Logout
       </button>
-      {notes.map((note) => (
-        <div className="note-card" key={note._id}>
-          <h2>{note.title}</h2>
 
-          <p>{note.description}</p>
-
-          <button className="delete-btn" onClick={() => handleDelete(note._id)}>
-            Delete
-          </button>
+      {notes.length === 0 ? (
+        <div className="empty-state">
+          <h2>No Notes Yet 📝</h2>
+          <p>Create your first note by clicking "Create Note".</p>
         </div>
-      ))}
+      ) : (
+        notes.map((note) => (
+          <div className="note-card" key={note._id}>
+            <h2>{note.title}</h2>
+
+            <p>{note.description}</p>
+
+            <button
+              className="delete-btn"
+              onClick={() => {
+                if (window.confirm("Delete this note?")) {
+                  handleDelete(note._id);
+                }
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))
+      )}
     </div>
   );
 };
