@@ -18,8 +18,7 @@ const Dashboard = () => {
         },
       );
 
-      console.log(error);
-
+      console.log(response.data);
       setNotes(response.data.notes);
     } catch (error) {
       console.log(error);
@@ -34,11 +33,14 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete( `${import.meta.env.VITE_API_URL}/api/notes/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/notes/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       fetchNotes();
     } catch (error) {
