@@ -94,7 +94,7 @@ const deleteNote = async (req, res) => {
 };
 export const getSingleNote = async (req, res) => {
   try {
-    const note = await Note.findOne({
+    const note = await noteModel.findOne({
       _id: req.params.id,
       userId: req.user.id,
     });
@@ -116,7 +116,7 @@ export const updateNote = async (req, res) => {
   try {
     const { title, description } = req.body;
 
-    const note = await Note.findOneAndUpdate(
+    const note = await noteModel.findOneAndUpdate(
       {
         _id: req.params.id,
         userId: req.user.id,
