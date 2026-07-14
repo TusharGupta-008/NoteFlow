@@ -90,7 +90,8 @@ const Dashboard = () => {
             <p>{note.description}</p>
 
             <button
-              className="delete-btn"
+              className="delete-btn" 
+              style={{ marginRight: "10px" }}
               onClick={() => {
                 if (window.confirm("Delete this note?")) {
                   handleDelete(note._id);
